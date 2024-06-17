@@ -1,0 +1,66 @@
+ffuf -w wordlist.txt -u 'https://ffuf.io.fi/FUZZ'
+ffuf -w wordlist.txt:MYCUSTOMKEYWORD -u 'https://ffuf.io.fi/MYCUSTOMKEYWORD'
+ffuf -w domains.txt:DOMAIN -w wordlist.txt:WORD -u 'https://DOMAIN/WORD'
+ffuf -mode clusterbomb -w domains.txt:DOMAIN -w wordlist.txt:WORD -u 'https://DOMAIN/WORD'
+ffuf -mode pitchfork -w usernames.txt:USER -w user_ids.txt:UID -u 'https://example.org/u/UID/profile/USER'
+ffuf -w wordlist.txt -request raw_req.txt
+#Method
+ffuf -X PATCH -w wordlist.txt -u https://ffuf.io.fi/FUZZ
+# Header example
+ffuf -w wordlist.txt -u 'https://ffuf.io.fi/' -H 'FUZZ: 127.0.0.1'
+# Request body example
+ffuf -w sqli_payloads.txt -u 'https://ffuf.io.fi/api/v1/users/1' \
+     -X PUT -H 'Content-Type: application/json' -d '{"uid":"FUZZ"}' -X PUT
+# Proxy example
+ffuf -x 'http://127.0.0.1:8080' -w wordlist.txt -u 'https://ffuf.io.fi/FUZZ'
+# Replay-proxy example
+ffuf -w wordlist.txt -u 'https://ffuf.io.fi/FUZZ' -replay-proxy 'http://127.0.0.1:8080'
+# Example: match all, but filter out all 400 (bad request) responses
+ffuf -w wordlist.txt -u 'https://ffuf.io.fi/FUZZ' -mc all -fc 400
+# Example: match all, but filter out all responses of size 42
+ffuf -w wordlist.txt -u 'https://ffuf.io.fi/FUZZ' -mc all -fs 42
+# Example: match all, but filter out all responses of word count 7
+ffuf -w wordlist.txt -u 'https://ffuf.io.fi/FUZZ' -mc all -fw 7
+
+Number of lines: -ml and -fl Similar in both uses to -mw and -fw, but counts number of lines in the response instead of number of words. The use cases are also similar. In most cases where you can decide between word and line count matching / filtering, you most likely should go with the word numbers, as it's more specific.
+
+Regexp: -mr and -fr Using this matcher / filter, you can define an regular expression to either match wanted resources or to filter out unsuccessful ones. Regexes are notoriously human-hostlile but very powerful.
+
+To use this type of matcher / filter you don't need to be an regex ninja though! The most common use case is to just look for the response for a specific string.
+
+While regexes are case sensitive by default, you can prefix your regex with (?i) to make it case insensitive.
+
+The example below fuzzes through different GET parameter names, and looks for open redirect vulnerabilities by looking into Location header in the response.
+
+Time based: -mt and -ft Response time based matching and filtering works great for timing attacks as well as matching for timing based sql injection attacks.
+
+Different from the other filters and matchers, you can use greater than: > and smaller than < operators to match / filter for successfully executed sql injection.
+
+The value is in milliseconds.
+
+# Example timing based sql injection payload
+ffuf -w sqli_payloads.txt -u 'https://ffuf.io.fi/api/something' \
+     -H 'Content-Type: application/json' -d '{"id":"FUZZ"}' -mt >5000
+
+Output
+
+ffuf has different ways to display output in both - standard output in terminal as well as output files in various file formats.
+
+The output file name can be set with a command line argument -o filename.ext and the file format with: -of json
+
+The different file types are as follows: json, ejson, html, md, csv, ecsv
+
+    Good 'ol JSON json
+    Base64 encoded payload in JSON for funky input data ejson
+    HTML page with interactive searchable table: html
+    Markdown: md
+    CSV: csv
+    Base64 encoded payload in CSV for funky input data ecsv
+    All of the above: all, the -o filename is used for the base name only, and the file format part is appended as an file name extension.
+
+JSONlines stdout output
+
+Changing the stdout messages from human-friendly default formatting to a jsonlines format for machine readable real-time output can prove to be beneficial in cases where the user might want to run ffuf as a part of automation process and to react on the matches real-time.
+
+The stdout output can be changed to jsonlines with a command line flag -json
+Pages 4
