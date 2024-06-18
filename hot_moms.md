@@ -1,3 +1,4 @@
+# Volatility  
 **System info**  
 vol.py -f “/path/to/file” windows.info  
 **Process info**  
@@ -18,12 +19,15 @@ vol.py -f “/path/to/file” windows.netstat
 **Registry**  
 vol.py -f “/path/to/file” windows.registry.hivescan  
 vol.py -f “/path/to/file” windows.registry.hivelist  
-vol.py -f “/path/to/file” windows.registry.printkey
-vol.py -f “/path/to/file” windows.registry.printkey ‑‑key “Software\Microsoft\Windows\CurrentVersion”
-**Files**
+vol.py -f “/path/to/file” windows.registry.printkey  
+vol.py -f “/path/to/file” windows.registry.printkey ‑‑key “Software\Microsoft\Windows\CurrentVersion”  
+**Files**  
 vol.py -f “/path/to/file” windows.filescan  
-vol.py -f “/path/to/file” -o “/path/to/dir” windows.dumpfiles
-vol.py -f “/path/to/file” -o “/path/to/dir” windows.dumpfiles ‑‑virtaddr <offset>
-vol.py -f “/path/to/file” -o “/path/to/dir” windows.dumpfiles ‑‑physaddr <offset>
-**useful**
-vol.py -f “/path/to/file” windows.malfind
+vol.py -f “/path/to/file” -o “/path/to/dir” windows.dumpfiles  
+vol.py -f “/path/to/file” -o “/path/to/dir” windows.dumpfiles ‑‑virtaddr <offset>  
+vol.py -f “/path/to/file” -o “/path/to/dir” windows.dumpfiles ‑‑physaddr <offset>  
+**useful**  
+vol.py -f “/path/to/file” windows.malfind  
+# Binwalk
+binwalk --dd ".*" file
+# Event Log  
