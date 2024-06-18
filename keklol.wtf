@@ -64,3 +64,6 @@ Changing the stdout messages from human-friendly default formatting to a jsonlin
 
 The stdout output can be changed to jsonlines with a command line flag -json
 Pages 4
+
+find / | awk -r '/flag/{print}'
+find  / -exec cat -s {} \; 2>/dev/null | awk -r '/ctf/{print}'
